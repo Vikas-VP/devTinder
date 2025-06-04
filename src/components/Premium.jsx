@@ -21,7 +21,7 @@ const Premium = () => {
       amount,
       currency,
       notes,
-      orderId,
+      order_id: orderId,
       name: "Vikas App",
       description: "This is payment gateway",
       prefill: {
