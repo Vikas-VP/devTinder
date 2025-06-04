@@ -11,6 +11,7 @@ const User = require("../models/User");
 
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   const currUser = req.user;
+  console.log(req, "bodyreq");
   const { membershipType } = req.body;
   try {
     const order = await razorpayInstance.orders.create({
