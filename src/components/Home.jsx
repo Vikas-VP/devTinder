@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../store/slices/userSlice";
 import { useEffect } from "react";
+import { createSocketConnection } from "../utils/Socket";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -27,6 +28,23 @@ export const Home = () => {
   useEffect(() => {
     !existingUser && userProfile();
   }, []);
+
+  useEffect(() => {
+    const socket = createSocketConnection();
+    if (existingUser) {
+      socket.emit("userOnline", existingUser?._id);
+    }
+
+    // socket.on("userStatusUpdate", ({ userId, status }) => {
+    //   dispatch(addUser(res?.data?.data));
+
+    //   setUserStatus((prev) => ({ ...prev, [userId]: status }));
+    // });
+
+    return () => {
+      socket.disconnect(); // triggers backend 'disconnect'
+    };
+  }, [existingUser]);
 
   return (
     <div>

@@ -27,6 +27,7 @@ export const Connections = () => {
               A card component has a figure, a body part, and inside body there
               are title and actions parts
             </p>
+            <div>{item?.status === "online" ? "🟢 Online" : "⚪ Offline"}</div>
             <div className="justify-end card-actions">
               <Link to={`/chat/${item?._id}`}>
                 <button className="btn btn-primary">Chat</button>

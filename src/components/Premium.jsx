@@ -1,8 +1,17 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
 
 const Premium = () => {
+  const [premiumUser, setPremiumUser] = useState(false);
+
+  const verifyPremiumUser = async () => {
+    const user = await axios.get(`${BASE_URL}/profile/view`, {
+      withCredentials: true,
+    });
+    setPremiumUser(user?.data?.data?.isPremium || false);
+  };
+
   const handleBuyClick = async (membershipType) => {
     const res = await axios.post(
       `${BASE_URL}/payment/create`,
@@ -15,7 +24,7 @@ const Premium = () => {
       keyId,
       _doc: { amount, currency, notes, orderId },
     } = res?.data?.data;
-    console.log(res?.data?.data, "data");
+
     var options = {
       key: keyId, // Enter the Key ID generated from the Dashboard
       amount,
@@ -28,11 +37,18 @@ const Premium = () => {
         firstName: notes?.firstName,
         contact: +919900000000,
       },
+      handler: verifyPremiumUser,
     };
-    console.log(options, "options");
+
     var rzp1 = new window.Razorpay(options);
     rzp1.open();
   };
+
+  useEffect(() => {
+    verifyPremiumUser();
+  }, []);
+
+  if (premiumUser) return <>Premium User</>;
 
   return (
     <div className="flex w-full m-10">
